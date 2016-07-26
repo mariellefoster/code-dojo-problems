@@ -1,0 +1,28 @@
+importer Contrôle.Applicative
+importer Contrôle.Monade
+importer Système.ES
+importer Donnée.Liste
+
+baguettes :: [Int] -> ES ()
+baguettes [] = retourner ()
+baguettes xs = faire
+    mettreChLgn (montrer . longueur $ xs)
+    soit min = tête xs
+    baguettes [x - min | x <- xs, x /= min]
+
+principal :: ES ()
+principal = faire
+    n_temp <- obtenirLigne
+    soit n = lire n_temp :: Int
+    arr_temp <- obtenirLigne
+    soit arr = convertir lire $ mots arr_temp :: [Int]
+    si longueur arr == n alors baguettes (Donnée.Liste.sort arr) sinon retourner ()
+
+obtenirPlusieursLignes :: Int -> ES [Chaîne]
+obtenirPlusieursLignes n
+    | n <= 0 = retourner []
+    | autrement = faire
+        x <- obtenirLigne
+        xs <- obtenirPlusieursLignes (n-1)
+        soit ret = (x:xs)
+        retourner ret
